@@ -44,18 +44,12 @@ Six specialized Airtable tables for different health metrics:
    cd health-logger-backend
    ```
 
-2. **Set up virtual environment with UV**
+2. **Install dependencies with UV**
    ```bash
-   uv venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   uv sync
    ```
 
-3. **Install dependencies**
-   ```bash
-   uv pip install -r requirements.txt
-   ```
-
-4. **Configure environment variables**
+3. **Configure environment variables**
    ```bash
    cp .env.example .env
    # Edit .env with your actual configuration
@@ -257,6 +251,9 @@ uv run pytest --cov=src --cov-report=html
 
 # Run specific test file
 uv run pytest tests/test_agent.py -v
+
+# Install dev dependencies if needed
+uv sync --group dev
 ```
 
 ### Code Quality
@@ -297,8 +294,8 @@ health-logger-backend/
 │   ├── test_utils.py
 │   └── test_config.py
 ├── .env.example
-├── requirements.txt
 ├── pyproject.toml
+├── uv.lock
 └── README.md
 ```
 
