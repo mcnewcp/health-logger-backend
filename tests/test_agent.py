@@ -237,16 +237,17 @@ class TestHealthLoggerAgent:
         mock_agent = Mock()
         mock_create_react_agent.return_value = mock_agent
         
-        with patch('src.config.settings.settings') as mock_settings:
-            mock_settings.airtable.personal_access_token = ""  # Missing token
-            mock_settings.airtable.base_id = "test_base"
-            mock_settings.validate_required_keys = Mock()
-            
-            agent = HealthLoggerAgent()
-            validation = agent.validate_configuration()
-            
-            assert validation["valid"] is False
-            assert any("Personal Access Token" in error for error in validation["errors"])
+        # Create a mock config with missing token
+        mock_config = Mock()
+        mock_config.airtable.personal_access_token = ""  # Missing token
+        mock_config.airtable.base_id = "test_base"
+        mock_config.validate_required_keys = Mock()
+        
+        agent = HealthLoggerAgent(config=mock_config)
+        validation = agent.validate_configuration()
+        
+        assert validation["valid"] is False
+        assert any("Personal Access Token" in error for error in validation["errors"])
 
 
 class TestFactoryAndConvenienceFunctions:
