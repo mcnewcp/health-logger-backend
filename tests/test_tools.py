@@ -28,11 +28,11 @@ class TestHeartLogTool:
         mock_client_class.return_value = mock_client
         
         # Test with both BP and heart rate
-        result = write_heart_log(
-            systolic_bp=120,
-            diastolic_bp=80,
-            heart_rate=72
-        )
+        result = write_heart_log.invoke({
+            "systolic_bp": 120,
+            "diastolic_bp": 80,
+            "heart_rate": 72
+        })
         
         assert "Successfully logged heart data" in result
         assert "120/80 mmHg" in result
@@ -48,7 +48,7 @@ class TestHeartLogTool:
         mock_client.write_heart_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_heart_log(heart_rate=75)
+        result = write_heart_log.invoke({"heart_rate": 75})
         
         assert "Successfully logged heart data" in result
         assert "75 bpm" in result
@@ -56,7 +56,7 @@ class TestHeartLogTool:
 
     def test_write_heart_log_no_data(self):
         """Test that providing no measurements returns error."""
-        result = write_heart_log()
+        result = write_heart_log.invoke({})
         assert "Error: At least one measurement" in result
 
     @patch('src.agent.tools.AirtableClient')
@@ -66,10 +66,10 @@ class TestHeartLogTool:
         mock_client.write_heart_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_heart_log(
-            heart_rate=72,
-            timestamp="yesterday at 8am"
-        )
+        result = write_heart_log.invoke({
+            "heart_rate": 72,
+            "timestamp": "yesterday at 8am"
+        })
         
         assert "Successfully logged heart data" in result
         mock_client.write_heart_log.assert_called_once()
@@ -81,7 +81,7 @@ class TestHeartLogTool:
         mock_client.write_heart_log.side_effect = Exception("Airtable error")
         mock_client_class.return_value = mock_client
         
-        result = write_heart_log(heart_rate=72)
+        result = write_heart_log.invoke({"heart_rate": 72})
         
         assert "Error logging heart data" in result
 
@@ -96,11 +96,11 @@ class TestBodyLogTool:
         mock_client.write_body_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_body_log(
-            weight=175.2,
-            body_fat_percentage=15.5,
-            muscle_mass=145.0
-        )
+        result = write_body_log.invoke({
+            "weight": 175.2,
+            "body_fat_percentage": 15.5,
+            "muscle_mass": 145.0
+        })
         
         assert "Successfully logged body data" in result
         assert "weight: 175.2 lbs" in result
@@ -110,7 +110,7 @@ class TestBodyLogTool:
 
     def test_write_body_log_no_data(self):
         """Test that providing no measurements returns error."""
-        result = write_body_log()
+        result = write_body_log.invoke({})
         assert "Error: At least one body measurement must be provided" in result
 
     @patch('src.agent.tools.AirtableClient')
@@ -120,7 +120,7 @@ class TestBodyLogTool:
         mock_client.write_body_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_body_log(weight=170.0)
+        result = write_body_log.invoke({"weight": 170.0})
         
         assert "Successfully logged body data" in result
         assert "weight: 170.0 lbs" in result
@@ -137,12 +137,12 @@ class TestNutritionLogTool:
         mock_client.write_nutrition_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_nutrition_log(
-            food_item="Protein shake",
-            calories=150,
-            protein_g=25.0,
-            carbs_g=5.0
-        )
+        result = write_nutrition_log.invoke({
+            "food_item": "Protein shake",
+            "calories": 150,
+            "protein_g": 25.0,
+            "carbs_g": 5.0
+        })
         
         assert "Successfully logged nutrition" in result
         assert "Protein shake" in result
@@ -157,7 +157,7 @@ class TestNutritionLogTool:
         mock_client.write_nutrition_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_nutrition_log(food_item="Apple")
+        result = write_nutrition_log.invoke({"food_item": "Apple"})
         
         assert "Successfully logged nutrition" in result
         assert "Apple" in result
@@ -170,7 +170,7 @@ class TestNutritionLogTool:
         mock_client.write_nutrition_log.side_effect = Exception("Database error")
         mock_client_class.return_value = mock_client
         
-        result = write_nutrition_log(food_item="Test food")
+        result = write_nutrition_log.invoke({"food_item": "Test food"})
         
         assert "Error logging nutrition data" in result
 
@@ -185,10 +185,10 @@ class TestCaffeineLogTool:
         mock_client.write_caffeine_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_caffeine_log(
-            source="Coffee",
-            caffeine_mg=95.0
-        )
+        result = write_caffeine_log.invoke({
+            "source": "Coffee",
+            "caffeine_mg": 95.0
+        })
         
         assert "Successfully logged caffeine" in result
         assert "Coffee" in result
@@ -202,11 +202,11 @@ class TestCaffeineLogTool:
         mock_client.write_caffeine_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_caffeine_log(
-            source="Green tea",
-            caffeine_mg=40.0,
-            timestamp="this morning"
-        )
+        result = write_caffeine_log.invoke({
+            "source": "Green tea",
+            "caffeine_mg": 40.0,
+            "timestamp": "this morning"
+        })
         
         assert "Successfully logged caffeine" in result
         assert "Green tea" in result
@@ -223,11 +223,11 @@ class TestAlcoholLogTool:
         mock_client.write_alcohol_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_alcohol_log(
-            drink_type="Red wine",
-            volume_oz=5.0,
-            alcohol_content=13.0
-        )
+        result = write_alcohol_log.invoke({
+            "drink_type": "Red wine",
+            "volume_oz": 5.0,
+            "alcohol_content": 13.0
+        })
         
         assert "Successfully logged alcohol" in result
         assert "Red wine" in result
@@ -242,7 +242,7 @@ class TestAlcoholLogTool:
         mock_client.write_alcohol_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_alcohol_log(drink_type="Beer")
+        result = write_alcohol_log.invoke({"drink_type": "Beer"})
         
         assert "Successfully logged alcohol" in result
         assert "Beer" in result
@@ -259,10 +259,10 @@ class TestSaunaLogTool:
         mock_client.write_sauna_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_sauna_log(
-            duration_minutes=20,
-            temperature_f=180
-        )
+        result = write_sauna_log.invoke({
+            "duration_minutes": 20,
+            "temperature_f": 180
+        })
         
         assert "Successfully logged sauna session" in result
         assert "20 minutes" in result
@@ -276,7 +276,7 @@ class TestSaunaLogTool:
         mock_client.write_sauna_log.return_value = "test_record_id"
         mock_client_class.return_value = mock_client
         
-        result = write_sauna_log(duration_minutes=15)
+        result = write_sauna_log.invoke({"duration_minutes": 15})
         
         assert "Successfully logged sauna session" in result
         assert "15 minutes" in result
@@ -289,7 +289,7 @@ class TestSaunaLogTool:
         mock_client.write_sauna_log.side_effect = Exception("Database error")
         mock_client_class.return_value = mock_client
         
-        result = write_sauna_log(duration_minutes=20)
+        result = write_sauna_log.invoke({"duration_minutes": 20})
         
         assert "Error logging sauna data" in result
 
