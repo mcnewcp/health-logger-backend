@@ -83,7 +83,7 @@ class TestSettings:
         "AIRTABLE_BASE_ID": "test_base",
         "LLM_PROVIDER": "openai"
         # Missing OPENAI_API_KEY
-    })
+    }, clear=True)
     def test_validate_required_keys_missing_openai(self):
         """Test validation fails when OpenAI key is missing."""
         settings = Settings.load_from_env()
@@ -98,7 +98,7 @@ class TestSettings:
         "AIRTABLE_BASE_ID": "test_base",
         "LLM_PROVIDER": "claude"
         # Missing ANTHROPIC_API_KEY
-    })
+    }, clear=True)
     def test_validate_required_keys_missing_claude(self):
         """Test validation fails when Claude key is missing."""
         settings = Settings.load_from_env()
@@ -214,7 +214,7 @@ class TestLLMConfig:
         "AIRTABLE_BASE_ID": "test_base",
         "LLM_PROVIDER": "openai"
         # Missing OPENAI_API_KEY
-    })
+    }, clear=True)
     def test_create_openai_llm_missing_key(self):
         """Test OpenAI creation fails with missing API key."""
         settings = Settings.load_from_env()
