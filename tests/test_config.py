@@ -248,7 +248,7 @@ class TestLLMConfig:
     })
     def test_create_llm_unsupported_provider(self):
         """Test create_llm fails with unsupported provider."""
-        # Manually create settings with invalid provider
+        from pydantic import ValidationError
         from src.config.settings import AirtableConfig, AppConfig
         
         airtable_config = AirtableConfig(
@@ -256,17 +256,11 @@ class TestLLMConfig:
             base_id="test_base"
         )
         
-        llm_config = LLMConfig(provider="invalid_provider")  # This will fail Pydantic validation
+        # This should raise a validation error during LLMConfig creation
+        with pytest.raises(ValidationError) as exc_info:
+            llm_config = LLMConfig(provider="invalid_provider")
         
-        app_config = AppConfig()
-        
-        # This should raise a validation error during creation
-        with pytest.raises(ValueError):
-            settings = Settings(
-                airtable=airtable_config,
-                llm=llm_config,
-                app=app_config
-            )
+        assert "Input should be 'ollama', 'openai' or 'claude'" in str(exc_info.value)
 
     @patch.dict(os.environ, {
         "AIRTABLE_PAT": "test_token",
