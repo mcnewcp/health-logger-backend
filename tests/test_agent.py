@@ -9,6 +9,7 @@ from src.agent.agent import (
     HealthLoggerAgent,
     create_health_logger_agent,
     log_health_data,
+    log_health_data_async,
     get_default_agent,
 )
 from src.config.settings import Settings
@@ -277,10 +278,13 @@ class TestFactoryAndConvenienceFunctions:
         mock_agent.process.assert_called_once_with("Test input")
 
     @patch('src.agent.agent.HealthLoggerAgent')
+    @pytest.mark.asyncio
     async def test_log_health_data_async(self, mock_agent_class):
         """Test async convenience function."""
+        from unittest.mock import AsyncMock
+        
         mock_agent = Mock()
-        mock_agent.process_async.return_value = "Success"
+        mock_agent.process_async = AsyncMock(return_value="Success")
         mock_agent_class.return_value = mock_agent
         
         result = await log_health_data_async("Test input")
