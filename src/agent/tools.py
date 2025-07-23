@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Optional
 
-from langchain.tools import tool
+from langchain_core.tools import tool
 from pydantic import BaseModel, Field
 
 from ..utils.airtable_client import (

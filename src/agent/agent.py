@@ -3,7 +3,7 @@
 from typing import Any, Dict, List, Optional
 
 from langgraph.prebuilt import create_react_agent
-from langchain.schema import BaseMessage, HumanMessage, SystemMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 
 from ..config.llm_config import create_llm, get_model_info
 from ..config.settings import Settings, settings
@@ -42,7 +42,7 @@ class HealthLoggerAgent:
             self.agent = create_react_agent(
                 model=self.llm,
                 tools=self.tools,
-                state_modifier=get_system_prompt(),
+                prompt=get_system_prompt(),
             )
             
         except Exception as e:

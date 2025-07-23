@@ -3,7 +3,7 @@
 from typing import Any
 
 from langchain_anthropic import ChatAnthropic
-from langchain_community.llms import Ollama
+from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 
 from .settings import LLMProvider, Settings, settings
@@ -23,7 +23,7 @@ def create_llm(config: Settings = settings) -> Any:
         config (Settings): Application configuration settings.
 
     Returns:
-        Any: Configured LLM instance (Ollama, ChatOpenAI, or ChatAnthropic).
+        Any: Configured LLM instance (ChatOllama, ChatOpenAI, or ChatAnthropic).
 
     Raises:
         LLMConfigError: If the LLM provider configuration is invalid.
@@ -41,7 +41,7 @@ def create_llm(config: Settings = settings) -> Any:
         raise LLMConfigError(f"Unsupported LLM provider: {config.llm.provider}")
 
 
-def _create_ollama_llm(config: Settings) -> Ollama:
+def _create_ollama_llm(config: Settings) -> ChatOllama:
     """
     Create and configure an Ollama LLM instance.
 
@@ -49,7 +49,7 @@ def _create_ollama_llm(config: Settings) -> Ollama:
         config (Settings): Application configuration settings.
 
     Returns:
-        Ollama: Configured Ollama instance.
+        ChatOllama: Configured ChatOllama instance.
 
     Raises:
         LLMConfigError: If Ollama configuration is invalid.
@@ -58,13 +58,13 @@ def _create_ollama_llm(config: Settings) -> Ollama:
         raise LLMConfigError("Ollama base URL and model are required for Ollama provider")
     
     try:
-        return Ollama(
+        return ChatOllama(
             base_url=config.llm.ollama_base_url,
             model=config.llm.ollama_model,
             temperature=0.1,  # Low temperature for consistent health data parsing
         )
     except Exception as e:
-        raise LLMConfigError(f"Failed to initialize Ollama: {e}") from e
+        raise LLMConfigError(f"Failed to initialize ChatOllama: {e}") from e
 
 
 def _create_openai_llm(config: Settings) -> ChatOpenAI:
