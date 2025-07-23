@@ -117,7 +117,7 @@ class TestAirtableClient:
             mock_settings.airtable.base_id = ""
             
             with pytest.raises(AirtableError):
-                AirtableClient()
+                AirtableClient(config=mock_settings)
 
     @patch('src.utils.airtable_client.Api')
     def test_initialization_success(self, mock_api):
